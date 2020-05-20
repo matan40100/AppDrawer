@@ -35,6 +35,7 @@ public class SoftWare extends JButton {
 	public void runSoftware() {
 		try {
 			new ProcessBuilder(this.location).start();
+			System.out.println("as");
 			System.exit(0);
 		} catch (IOException e) {
 			try {
