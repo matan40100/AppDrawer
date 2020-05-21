@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.io.IOException;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -12,11 +13,14 @@ public class SoftWare extends JButton {
 	String name;
 	String location;
 	ImageIcon icon;
+	Color softwareBackground,textColor;
 
-	public SoftWare(ImageIcon imageIcon, String name, String location) {
+	public SoftWare(ImageIcon imageIcon, String name, String location, Color softwareBackground,Color textColor) {
 		this.name = name;
 		this.location = location;
 		this.icon = imageIcon;
+		this.softwareBackground = softwareBackground;
+		this.textColor = textColor;
 
 		setIcon(this.icon);
 
@@ -24,18 +28,17 @@ public class SoftWare extends JButton {
 		setPreferredSize(new Dimension(150, 150));
 		setHorizontalTextPosition(JLabel.CENTER);
 		setVerticalTextPosition(JLabel.BOTTOM);
-		setBackground(Color.white);
+		setBackground(softwareBackground);
+		setForeground(textColor);
 		setFont(new Font("Arial", Font.PLAIN, 16));
 		setContentAreaFilled(false);
 		setOpaque(true);
-		setBackground(Color.white);
 
 	}
 
 	public void runSoftware() {
 		try {
 			new ProcessBuilder(this.location).start();
-			System.out.println("as");
 			System.exit(0);
 		} catch (IOException e) {
 			try {
