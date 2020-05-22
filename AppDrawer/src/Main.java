@@ -42,7 +42,7 @@ public class Main {
 	static Image icon = null;
 	static Scanner inputSoftware, inputFolder;
 	static Point mousePoint;
-	static Color mainBackground, softwareBackground, textColor;
+	static Color mainBackground, tileBackground, textColor;
 
 	public static void main(String[] args) {
 
@@ -64,28 +64,18 @@ public class Main {
 		} catch (FileNotFoundException e1) {
 		}
 
-		// Read the theme of the software
-		theme = inputSoftware.nextLine();
-		if (theme.equals("dark")) {
-			mainBackground = new Color(32, 34, 37);
-			softwareBackground = new Color(47, 49, 54);
-			textColor = Color.WHITE;
-		} else if (theme.equals("light")) {
-			mainBackground = new Color(240, 240, 240);
-			softwareBackground = Color.WHITE;
-			textColor = Color.BLACK;
-		}
+		readTheme();
 
 		// Create the frame with software paenl
 		mainFrame = new JFrame("Softwares");
 
 		softwarePanel = new JPanel();
-		softwarePanel.setLayout(new GridLayout(inputSoftware.nextInt(), inputSoftware.nextInt(), 15, 15));
+		softwarePanel.setLayout(new GridLayout(0, inputSoftware.nextInt(), 15, 15));
 		softwarePanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		softwarePanel.setBackground(mainBackground);
 
 		folderPanel = new JPanel();
-		folderPanel.setLayout(new GridLayout(inputFolder.nextInt(), inputFolder.nextInt(), 15, 15));
+		folderPanel.setLayout(new GridLayout(0, inputFolder.nextInt(), 15, 15));
 		folderPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		folderPanel.setBackground(mainBackground);
 
@@ -95,44 +85,11 @@ public class Main {
 		try {
 			mainFrame.setIconImage(ImageIO.read(Main.class.getResource("/icon.png")));
 		} catch (IOException e2) {
-			e2.printStackTrace();
 		}
 
-		// Read softwares from file
-		inputSoftware.nextLine();
-		while (inputSoftware.hasNextLine()) {
-			softwareName = inputSoftware.nextLine();
-			softwareLocation = inputSoftware.nextLine();
-			softwareIcon = inputSoftware.nextLine();
-
-			File file = new File("C:\\Users\\Matan\\AppData\\Roaming\\AppDrawer\\images\\" + softwareIcon);
-			try {
-				icon = ImageIO.read(file).getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-			} catch (IOException e) {
-			}
-
-			if (inputSoftware.hasNextLine()) {
-				inputSoftware.nextLine();
-			}
-
-			SoftWare software = new SoftWare(new ImageIcon(icon), softwareName, softwareLocation, softwareBackground,
-					textColor);
-
-			softwarePanel.add(software);
-		}
-
-		inputFolder.nextLine();
-		while (inputFolder.hasNextLine()) {
-			folderName = inputFolder.nextLine();
-			folderLocation = inputFolder.nextLine();
-
-			if (inputFolder.hasNextLine()) {
-				inputFolder.nextLine();
-			}
-			Folder folder = new Folder(folderName, folderLocation, softwareBackground, textColor);
-			
-			folderPanel.add(folder);
-		}
+		// Read Softwares & Folders
+		readSoftwares();
+		readFolders();
 
 		// Title bar
 		titlePanel = new JPanel();
@@ -158,7 +115,7 @@ public class Main {
 
 		minimizeButton = new JButton("—");
 		minimizeButton.setFont(new Font("Arial", Font.BOLD, 16));
-		minimizeButton.setBackground(softwareBackground);
+		minimizeButton.setBackground(tileBackground);
 		minimizeButton.setForeground(textColor);
 		minimizeButton.setContentAreaFilled(false);
 		minimizeButton.setOpaque(true);
@@ -169,27 +126,30 @@ public class Main {
 
 		themeButton = new JButton("Theme");
 		themeButton.setFont(new Font("Arial", Font.BOLD, 16));
-		themeButton.setBackground(softwareBackground);
+		themeButton.setBackground(tileBackground);
 		themeButton.setForeground(textColor);
 		themeButton.setContentAreaFilled(false);
 		themeButton.setOpaque(true);
 		themeButton.setFocusPainted(false);
 		themeButton.addActionListener(e -> {
+			try {
+				inputSoftware = new Scanner(
+						new File("C:\\Users\\Matan\\AppData\\Roaming\\AppDrawer\\softwaredata.txt"));
+			} catch (FileNotFoundException e2) {
+			}
+			theme = inputSoftware.nextLine();
 			if (theme.equals("dark")) {
 				try {
 					replaceLine(1, "light");
 				} catch (IOException e1) {
 				}
-				mainFrame.dispose();
-				main(null);
-
+				changeTheme(new Color(240, 240, 240), Color.WHITE, Color.BLACK);
 			} else if (theme.equals("light")) {
 				try {
 					replaceLine(1, "dark");
 				} catch (IOException e1) {
 				}
-				mainFrame.dispose();
-				main(null);
+				changeTheme(new Color(32, 34, 37), new Color(47, 49, 54), Color.WHITE);
 			}
 		});
 
@@ -253,12 +213,87 @@ public class Main {
 		}
 	}
 
+	public static void readTheme() {
+		theme = inputSoftware.nextLine();
+		if (theme.equals("dark")) {
+			mainBackground = new Color(32, 34, 37);
+			tileBackground = new Color(47, 49, 54);
+			textColor = Color.WHITE;
+		} else if (theme.equals("light")) {
+			mainBackground = new Color(240, 240, 240);
+			tileBackground = Color.WHITE;
+			textColor = Color.BLACK;
+		}
+	}
+
+	public static void readSoftwares() {
+		inputSoftware.nextLine();
+		while (inputSoftware.hasNextLine()) {
+			softwareName = inputSoftware.nextLine();
+			softwareLocation = inputSoftware.nextLine();
+			softwareIcon = inputSoftware.nextLine();
+
+			File file = new File("C:\\Users\\Matan\\AppData\\Roaming\\AppDrawer\\images\\" + softwareIcon);
+			try {
+				icon = ImageIO.read(file).getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+			} catch (IOException e) {
+			}
+
+			if (inputSoftware.hasNextLine()) {
+				inputSoftware.nextLine();
+			}
+
+			SoftWare software = new SoftWare(new ImageIcon(icon), softwareName, softwareLocation, tileBackground,
+					textColor);
+
+			softwarePanel.add(software);
+		}
+	}
+
+	public static void readFolders() {
+		inputFolder.nextLine();
+		while (inputFolder.hasNextLine()) {
+			folderName = inputFolder.nextLine();
+			folderLocation = inputFolder.nextLine();
+
+			if (inputFolder.hasNextLine()) {
+				inputFolder.nextLine();
+			}
+			Folder folder = new Folder(folderName, folderLocation, tileBackground, textColor);
+
+			folderPanel.add(folder);
+		}
+	}
+
+	public static void changeTheme(Color mainBackground, Color tileBackground, Color textColor) {
+
+		softwarePanel.setBackground(mainBackground);
+		folderPanel.setBackground(mainBackground);
+		themeButton.setBackground(tileBackground);
+		themeButton.setForeground(textColor);
+		minimizeButton.setBackground(tileBackground);
+		minimizeButton.setForeground(textColor);
+		titlePanel.setBackground(mainBackground);
+		title.setForeground(textColor);
+
+		for (int i = 0; i < softwarePanel.getComponentCount(); i++) {
+
+			softwarePanel.getComponent(i).setBackground(tileBackground);
+			softwarePanel.getComponent(i).setForeground(textColor);
+		}
+
+		for (int i = 0; i < folderPanel.getComponentCount(); i++) {
+			folderPanel.getComponent(i).setBackground(tileBackground);
+			folderPanel.getComponent(i).setForeground(textColor);
+		}
+	}
+
 	public static void replaceLine(int lineNumber, String data) throws IOException {
-		
+
 		Path path = Paths.get("C:\\Users\\Matan\\AppData\\Roaming\\AppDrawer\\softwaredata.txt");
 		List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
 		lines.set(lineNumber - 1, data);
 		Files.write(path, lines, StandardCharsets.UTF_8);
-		System.out.println("sa");
 	}
+
 }

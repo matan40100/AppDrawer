@@ -20,7 +20,7 @@ public class Folder extends JButton {
     private String name;
     private String location;
     private ImageIcon icon;
-    private Color softwareBackground, textColor;
+    private Color tileBackground, textColor;
     private Border border;
 
 
@@ -32,13 +32,13 @@ public class Folder extends JButton {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.softwareBackground = softwareBackground;
+        this.tileBackground = softwareBackground;
         this.textColor = textColor;
         this.border = BorderFactory.createLineBorder(this.textColor);
 
         setIcon(this.icon);
         setText(this.name);
-        setBackground(this.softwareBackground);
+        setBackground(this.tileBackground);
 		setForeground(this.textColor);
         setPreferredSize(new Dimension(150, 150));
 		setHorizontalTextPosition(JLabel.CENTER);
