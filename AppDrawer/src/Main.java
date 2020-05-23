@@ -252,7 +252,7 @@ public class Main {
 			}
 		});
 
-		
+		System.gc();
 		mainFrame.setUndecorated(true);
 		mainFrame.pack();
 		mainFrame.setLocationRelativeTo(null);
