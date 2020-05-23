@@ -18,22 +18,23 @@ public class SoftWare extends JButton {
 	private String name;
 	private String location;
 	private ImageIcon icon;
-	private Color tileBackground,textColor;
+	
 	private Border border;
+	private Menu menu;
 
-	public SoftWare(ImageIcon imageIcon, String name, String location, Color softwareBackground,Color textColor) {
+	public SoftWare(ImageIcon imageIcon, String name, String location, Color tileBackground,Color textColor) {
 		this.name = name;
 		this.location = location;
 		this.icon = imageIcon;
-		this.tileBackground = softwareBackground;
-		this.textColor = textColor;
-		this.border = BorderFactory.createLineBorder(this.textColor);
 		
+		this.border = BorderFactory.createLineBorder(textColor);
+		this.menu = new Menu(tileBackground,textColor);
+
 		setName(this.name);
 		setIcon(this.icon);
 		setText("<html><center>" + this.name.replace("\\n", "<br>") + "</center></html>");
-		setBackground(this.tileBackground);
-		setForeground(this.textColor);
+		setBackground(tileBackground);
+		setForeground(textColor);
 		setPreferredSize(new Dimension(150, 150));
 		setHorizontalTextPosition(JLabel.CENTER);
 		setVerticalTextPosition(JLabel.BOTTOM);
@@ -45,12 +46,13 @@ public class SoftWare extends JButton {
 		addActionListener(e -> {
 			runSoftware();
 		});
+		
 
 		addMouseListener(new MouseAdapter() {
 		 	@Override
 			public void mousePressed(MouseEvent e) {
 			   if (e.getButton() == MouseEvent.BUTTON3) {
-					new Menu(e.getPoint(),e.getComponent(),softwareBackground,textColor);
+					menu.showPopup(e.getPoint(),e.getComponent());
 						
 			   }
 			} 
@@ -79,4 +81,12 @@ public class SoftWare extends JButton {
 			}
 		}
 	}
+	public void setBorderColor(Color color)
+    {
+        this.border = BorderFactory.createLineBorder(color);
+    }
+
+	public Menu getMenu() {
+		return menu;
+	}	
 }

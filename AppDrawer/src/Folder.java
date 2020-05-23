@@ -15,44 +15,52 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.border.Border;
 
-
 public class Folder extends JButton {
     private String name;
     private String location;
     private ImageIcon icon;
-    private Color tileBackground, textColor;
+    
     private Border border;
+    private Menu menu;
 
-
-    public Folder(String name, String location, Color softwareBackground, Color textColor) {
+    public Folder(String name, String location, Color tileBackground, Color textColor) {
         this.name = name;
         this.location = location;
         try {
-            this.icon = new ImageIcon(ImageIO.read(Main.class.getResource("/folder.png")).getScaledInstance(80, 80, Image.SCALE_SMOOTH));
+            this.icon = new ImageIcon(
+                    ImageIO.read(Main.class.getResource("/folder.png")).getScaledInstance(80, 80, Image.SCALE_SMOOTH));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.tileBackground = softwareBackground;
-        this.textColor = textColor;
-        this.border = BorderFactory.createLineBorder(this.textColor);
+       
+        this.border = BorderFactory.createLineBorder(textColor);
+        this.menu = new Menu(tileBackground, textColor);
 
+        setName(this.name);
         setIcon(this.icon);
         setText(this.name);
-        setBackground(this.tileBackground);
-		setForeground(this.textColor);
+        setBackground(tileBackground);
+        setForeground(textColor);
         setPreferredSize(new Dimension(150, 150));
-		setHorizontalTextPosition(JLabel.CENTER);
-		setVerticalTextPosition(JLabel.BOTTOM);
-		setFont(new Font("Arial", Font.PLAIN, 16));
+        setHorizontalTextPosition(JLabel.CENTER);
+        setVerticalTextPosition(JLabel.BOTTOM);
+        setFont(new Font("Arial", Font.PLAIN, 16));
         setContentAreaFilled(false);
         setOpaque(true);
         setFocusPainted(false);
-		
-		addActionListener(e -> {
-			openFolder();
+
+        addActionListener(e -> {
+            openFolder();
         });
-        
+
         addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    menu.showPopup(e.getPoint(), e.getComponent());
+                }
+            }
+
             public void mouseEntered(MouseEvent evt) {
                 setBorder(border);
             }
@@ -62,11 +70,19 @@ public class Folder extends JButton {
             }
         });
     }
-    public void openFolder()
-    {
+
+    public void openFolder() {
         try {
             Desktop.getDesktop().open(new File(this.location));
         } catch (IOException e) {
         }
+    }
+
+    public void setBorderColor(Color color) {
+        this.border = BorderFactory.createLineBorder(color);
+    }
+
+    public Menu getMenu() {
+        return menu;
     }
 }

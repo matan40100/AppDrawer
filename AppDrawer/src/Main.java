@@ -5,12 +5,15 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -23,9 +26,11 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -35,7 +40,7 @@ public class Main {
 	static JFrame mainFrame;
 	static JPanel softwarePanel, folderPanel, titlePanel;
 	static JLabel title;
-	static JButton exitButton, minimizeButton, themeButton;
+	static JButton exitButton, minimizeButton, themeButton, addButton;
 
 	static String softwareName, softwareLocation, softwareIcon;
 	static String folderName, folderLocation;
@@ -48,19 +53,46 @@ public class Main {
 
 		setLookAndFeel();
 		// Check if the folder is exists
-		if (!new File("C:\\Users\\Matan\\AppData\\Roaming\\AppDrawer").exists()) {
-			new File("C:\\Users\\Matan\\AppData\\Roaming\\AppDrawer").mkdir();
-			new File("C:\\Users\\Matan\\AppData\\Roaming\\AppDrawer\\images").mkdir();
+		if (!new File("C:\\Users\\" + System.getProperty("user.name") + "\\AppData\\Roaming\\AppDrawer").exists()) {
+			new File("C:\\Users\\" + System.getProperty("user.name") + "\\AppData\\Roaming\\AppDrawer").mkdir();
+			new File("C:\\Users\\" + System.getProperty("user.name") + "\\AppData\\Roaming\\AppDrawer\\images").mkdir();
 			try {
-				new File("C:\\Users\\Matan\\AppData\\Roaming\\AppDrawer\\softwaredata.txt").createNewFile();
-				new File("C:\\Users\\Matan\\AppData\\Roaming\\AppDrawer\\folderdata.txt").createNewFile();
+				new File("C:\\Users\\" + System.getProperty("user.name")
+						+ "\\AppData\\Roaming\\AppDrawer\\softwaredata.txt").createNewFile();
+				new File("C:\\Users\\" + System.getProperty("user.name")
+						+ "\\AppData\\Roaming\\AppDrawer\\folderdata.txt").createNewFile();
 			} catch (Exception e) {
+			}
+			try {
+				FileWriter softwareFile = new FileWriter("C:\\Users\\" + System.getProperty("user.name")
+						+ "\\AppData\\Roaming\\AppDrawer\\softwaredata.txt", true);
+
+				BufferedWriter bufferWritter = new BufferedWriter(softwareFile);
+				bufferWritter.write(theme);
+				bufferWritter.newLine();
+				bufferWritter.write("5");
+				bufferWritter.close();
+				softwareFile.close();
+
+				FileWriter folderFile = new FileWriter("C:\\Users\\" + System.getProperty("user.name")
+						+ "\\AppData\\Roaming\\AppDrawer\\folderdata.txt", true);
+
+				 bufferWritter = new BufferedWriter(folderFile);
+				 bufferWritter.write("5");
+				 bufferWritter.close();
+				 folderFile.close();
+
+
+			} catch (Exception e) {
+
 			}
 
 		}
 		try {
-			inputSoftware = new Scanner(new File("C:\\Users\\Matan\\AppData\\Roaming\\AppDrawer\\softwaredata.txt"));
-			inputFolder = new Scanner(new File("C:\\Users\\Matan\\AppData\\Roaming\\AppDrawer\\folderdata.txt"));
+			inputSoftware = new Scanner(new File("C:\\Users\\" + System.getProperty("user.name")
+					+ "\\AppData\\Roaming\\AppDrawer\\softwaredata.txt"));
+			inputFolder = new Scanner(new File(
+					"C:\\Users\\" + System.getProperty("user.name") + "\\AppData\\Roaming\\AppDrawer\\folderdata.txt"));
 		} catch (FileNotFoundException e1) {
 		}
 
@@ -133,8 +165,8 @@ public class Main {
 		themeButton.setFocusPainted(false);
 		themeButton.addActionListener(e -> {
 			try {
-				inputSoftware = new Scanner(
-						new File("C:\\Users\\Matan\\AppData\\Roaming\\AppDrawer\\softwaredata.txt"));
+				inputSoftware = new Scanner(new File("C:\\Users\\" + System.getProperty("user.name")
+						+ "\\AppData\\Roaming\\AppDrawer\\softwaredata.txt"));
 			} catch (FileNotFoundException e2) {
 			}
 			theme = inputSoftware.nextLine();
@@ -143,14 +175,32 @@ public class Main {
 					replaceLine(1, "light");
 				} catch (IOException e1) {
 				}
-				changeTheme(new Color(240, 240, 240), Color.WHITE, Color.BLACK);
+				mainBackground = new Color(240, 240, 240);
+				tileBackground = Color.WHITE;
+				textColor = Color.BLACK;
+				changeTheme(mainBackground, tileBackground, textColor);
 			} else if (theme.equals("light")) {
 				try {
 					replaceLine(1, "dark");
 				} catch (IOException e1) {
 				}
-				changeTheme(new Color(32, 34, 37), new Color(47, 49, 54), Color.WHITE);
+				mainBackground = new Color(32, 34, 37);
+				tileBackground = new Color(47, 49, 54);
+				textColor = Color.WHITE;
+				changeTheme(mainBackground, tileBackground, textColor);
 			}
+		});
+
+		addButton = new JButton("Add");
+		addButton.setFont(new Font("Arial", Font.BOLD, 16));
+		addButton.setBackground(tileBackground);
+		addButton.setForeground(textColor);
+		addButton.setContentAreaFilled(false);
+		addButton.setOpaque(true);
+		addButton.setFocusPainted(false);
+		addButton.addActionListener(e -> {
+			new AddMenu(mainBackground, tileBackground, textColor);
+
 		});
 
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -160,14 +210,20 @@ public class Main {
 		titlePanel.add(themeButton, c);
 
 		c.gridx = 1;
+		c.weightx = 0;
+		c.insets = new Insets(0, 10, 0, 0);
+		titlePanel.add(addButton, c);
+
+		c.insets = new Insets(0, 0, 0, 0);
+		c.gridx = 2;
 		c.weightx = 3;
 		titlePanel.add(title, c);
 
-		c.gridx = 2;
+		c.gridx = 3;
 		c.weightx = 0;
 		titlePanel.add(minimizeButton, c);
 
-		c.gridx = 3;
+		c.gridx = 4;
 		c.weightx = 0;
 		titlePanel.add(exitButton, c);
 
@@ -181,7 +237,6 @@ public class Main {
 		mainFrame.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-
 				// get location of Window
 				int thisX = mainFrame.getLocation().x;
 				int thisY = mainFrame.getLocation().y;
@@ -197,6 +252,7 @@ public class Main {
 			}
 		});
 
+		
 		mainFrame.setUndecorated(true);
 		mainFrame.pack();
 		mainFrame.setLocationRelativeTo(null);
@@ -227,13 +283,19 @@ public class Main {
 	}
 
 	public static void readSoftwares() {
-		inputSoftware.nextLine();
+		if((inputSoftware.hasNextLine()))
+		{
+			inputSoftware.nextLine();
+		}
+		
 		while (inputSoftware.hasNextLine()) {
+			
 			softwareName = inputSoftware.nextLine();
 			softwareLocation = inputSoftware.nextLine();
 			softwareIcon = inputSoftware.nextLine();
 
-			File file = new File("C:\\Users\\Matan\\AppData\\Roaming\\AppDrawer\\images\\" + softwareIcon);
+			File file = new File("C:\\Users\\" + System.getProperty("user.name")
+					+ "\\AppData\\Roaming\\AppDrawer\\images\\" + softwareIcon);
 			try {
 				icon = ImageIO.read(file).getScaledInstance(80, 80, Image.SCALE_SMOOTH);
 			} catch (IOException e) {
@@ -251,8 +313,12 @@ public class Main {
 	}
 
 	public static void readFolders() {
-		inputFolder.nextLine();
+		if((inputFolder.hasNextLine()))
+		{
+			inputFolder.nextLine();
+		}
 		while (inputFolder.hasNextLine()) {
+			
 			folderName = inputFolder.nextLine();
 			folderLocation = inputFolder.nextLine();
 
@@ -271,6 +337,8 @@ public class Main {
 		folderPanel.setBackground(mainBackground);
 		themeButton.setBackground(tileBackground);
 		themeButton.setForeground(textColor);
+		addButton.setBackground(tileBackground);
+		addButton.setForeground(textColor);
 		minimizeButton.setBackground(tileBackground);
 		minimizeButton.setForeground(textColor);
 		titlePanel.setBackground(mainBackground);
@@ -280,17 +348,26 @@ public class Main {
 
 			softwarePanel.getComponent(i).setBackground(tileBackground);
 			softwarePanel.getComponent(i).setForeground(textColor);
+			((SoftWare) softwarePanel.getComponent(i)).setBorderColor(textColor);
+			((SoftWare) softwarePanel.getComponent(i)).getMenu().getDeleteItem().setBackground(tileBackground);
+			((SoftWare) softwarePanel.getComponent(i)).getMenu().getDeleteItem().setForeground(textColor);
+			((SoftWare) softwarePanel.getComponent(i)).getMenu().setBorder(BorderFactory.createLineBorder(textColor));
 		}
 
 		for (int i = 0; i < folderPanel.getComponentCount(); i++) {
 			folderPanel.getComponent(i).setBackground(tileBackground);
 			folderPanel.getComponent(i).setForeground(textColor);
+			((Folder) folderPanel.getComponent(i)).setBorderColor(textColor);
+			((Folder) folderPanel.getComponent(i)).getMenu().getDeleteItem().setBackground(tileBackground);
+			((Folder) folderPanel.getComponent(i)).getMenu().getDeleteItem().setForeground(textColor);
+			((Folder) folderPanel.getComponent(i)).getMenu().setBorder(BorderFactory.createLineBorder(textColor));
 		}
 	}
 
 	public static void replaceLine(int lineNumber, String data) throws IOException {
 
-		Path path = Paths.get("C:\\Users\\Matan\\AppData\\Roaming\\AppDrawer\\softwaredata.txt");
+		Path path = Paths.get(
+				"C:\\Users\\" + System.getProperty("user.name") + "\\AppData\\Roaming\\AppDrawer\\softwaredata.txt");
 		List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
 		lines.set(lineNumber - 1, data);
 		Files.write(path, lines, StandardCharsets.UTF_8);
