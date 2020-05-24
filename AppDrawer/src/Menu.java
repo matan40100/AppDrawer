@@ -86,7 +86,6 @@ public class Menu extends JPopupMenu {
 
                         if(lines.get(lines.size()-1).equals(""))
                         {
-                            System.out.println("te");
                             lines.remove(lines.size()-1);
                         }        
                     } else {
@@ -102,7 +101,7 @@ public class Menu extends JPopupMenu {
             Main.folderPanel.revalidate();
             Main.folderPanel.repaint();
         }
-
+        System.gc();
         Main.mainFrame.pack();
 
     }

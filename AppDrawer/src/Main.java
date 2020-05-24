@@ -214,11 +214,13 @@ public class Main {
 		c.insets = new Insets(0, 10, 0, 0);
 		titlePanel.add(addButton, c);
 
-		c.insets = new Insets(0, 0, 0, 0);
+		
+		c.insets = new Insets(0, 0, 0, 65);
 		c.gridx = 2;
 		c.weightx = 3;
 		titlePanel.add(title, c);
 
+		c.insets = new Insets(0, 0, 0, 0);
 		c.gridx = 3;
 		c.weightx = 0;
 		titlePanel.add(minimizeButton, c);
@@ -254,7 +256,14 @@ public class Main {
 
 		System.gc();
 		mainFrame.setUndecorated(true);
-		mainFrame.pack();
+		if(softwarePanel.getComponentCount() >0)
+		{
+			mainFrame.pack();
+			
+		}else{
+			mainFrame.setSize(840, 500);
+		}
+		
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setVisible(true);
 		mainFrame.setResizable(false);
