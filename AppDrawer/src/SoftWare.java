@@ -13,7 +13,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.border.Border;
 
 
-public class SoftWare extends JButton {
+public class Software extends JButton {
 
 	private String name;
 	private String location;
@@ -22,7 +22,7 @@ public class SoftWare extends JButton {
 	private Border border;
 	private Menu menu;
 
-	public SoftWare(ImageIcon imageIcon, String name, String location, Color tileBackground,Color textColor) {
+	public Software(ImageIcon imageIcon, String name, String location, Color tileBackground,Color textColor) {
 		this.name = name;
 		this.location = location;
 		this.icon = imageIcon;

@@ -314,7 +314,7 @@ public class Main {
 				inputSoftware.nextLine();
 			}
 
-			SoftWare software = new SoftWare(new ImageIcon(icon), softwareName, softwareLocation, tileBackground,
+			Software software = new Software(new ImageIcon(icon), softwareName, softwareLocation, tileBackground,
 					textColor);
 
 			softwarePanel.add(software);
@@ -357,10 +357,10 @@ public class Main {
 
 			softwarePanel.getComponent(i).setBackground(tileBackground);
 			softwarePanel.getComponent(i).setForeground(textColor);
-			((SoftWare) softwarePanel.getComponent(i)).setBorderColor(textColor);
-			((SoftWare) softwarePanel.getComponent(i)).getMenu().getDeleteItem().setBackground(tileBackground);
-			((SoftWare) softwarePanel.getComponent(i)).getMenu().getDeleteItem().setForeground(textColor);
-			((SoftWare) softwarePanel.getComponent(i)).getMenu().setBorder(BorderFactory.createLineBorder(textColor));
+			((Software) softwarePanel.getComponent(i)).setBorderColor(textColor);
+			((Software) softwarePanel.getComponent(i)).getMenu().getDeleteItem().setBackground(tileBackground);
+			((Software) softwarePanel.getComponent(i)).getMenu().getDeleteItem().setForeground(textColor);
+			((Software) softwarePanel.getComponent(i)).getMenu().setBorder(BorderFactory.createLineBorder(textColor));
 		}
 
 		for (int i = 0; i < folderPanel.getComponentCount(); i++) {

@@ -153,7 +153,7 @@ public class AddMenu extends JDialog {
             } catch (IOException e1) {
             }
 
-            SoftWare software = new SoftWare(new ImageIcon(icon), displayNameField.getText(), locationField.getText(),
+            Software software = new Software(new ImageIcon(icon), displayNameField.getText(), locationField.getText(),
                     tileBackground, textColor);
             Main.softwarePanel.add(software);
             Main.softwarePanel.revalidate();

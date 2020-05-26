@@ -45,7 +45,7 @@ public class Menu extends JPopupMenu {
         int i = 0;
         Path path;
         List<String> lines;
-        if (component instanceof SoftWare) {
+        if (component instanceof Software) {
             path = Paths.get("C:\\Users\\"+System.getProperty("user.name")+"\\AppData\\Roaming\\AppDrawer\\softwaredata.txt");
             lines = Files.readAllLines(path, StandardCharsets.UTF_8);
             for (i = 0; i < lines.size(); i++) {
