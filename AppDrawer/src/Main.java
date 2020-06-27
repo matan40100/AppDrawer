@@ -77,11 +77,10 @@ public class Main {
 				FileWriter folderFile = new FileWriter("C:\\Users\\" + System.getProperty("user.name")
 						+ "\\AppData\\Roaming\\AppDrawer\\folderdata.txt", true);
 
-				 bufferWritter = new BufferedWriter(folderFile);
-				 bufferWritter.write("5");
-				 bufferWritter.close();
-				 folderFile.close();
-
+				bufferWritter = new BufferedWriter(folderFile);
+				bufferWritter.write("5");
+				bufferWritter.close();
+				folderFile.close();
 
 			} catch (Exception e) {
 
@@ -214,7 +213,6 @@ public class Main {
 		c.insets = new Insets(0, 10, 0, 0);
 		titlePanel.add(addButton, c);
 
-		
 		c.insets = new Insets(0, 0, 0, 65);
 		c.gridx = 2;
 		c.weightx = 3;
@@ -256,14 +254,13 @@ public class Main {
 
 		System.gc();
 		mainFrame.setUndecorated(true);
-		if(softwarePanel.getComponentCount() >0)
-		{
+		if (softwarePanel.getComponentCount() > 0) {
 			mainFrame.pack();
-			
-		}else{
+
+		} else {
 			mainFrame.setSize(840, 500);
 		}
-		
+
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setVisible(true);
 		mainFrame.setResizable(false);
@@ -292,13 +289,12 @@ public class Main {
 	}
 
 	public static void readSoftwares() {
-		if((inputSoftware.hasNextLine()))
-		{
+		if ((inputSoftware.hasNextLine())) {
 			inputSoftware.nextLine();
 		}
-		
+
 		while (inputSoftware.hasNextLine()) {
-			
+
 			softwareName = inputSoftware.nextLine();
 			softwareLocation = inputSoftware.nextLine();
 			softwareIcon = inputSoftware.nextLine();
@@ -322,12 +318,11 @@ public class Main {
 	}
 
 	public static void readFolders() {
-		if((inputFolder.hasNextLine()))
-		{
+		if ((inputFolder.hasNextLine())) {
 			inputFolder.nextLine();
 		}
 		while (inputFolder.hasNextLine()) {
-			
+
 			folderName = inputFolder.nextLine();
 			folderLocation = inputFolder.nextLine();
 
